@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'ManageMyHome',
+    'bootstrap5'
 ]
 
 MIDDLEWARE = [
@@ -127,3 +128,8 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 DATE_FORMAT = "%Y-%m-%d"
+
+AUTH_USER_MODEL = 'ManageMyHome.t_user'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
