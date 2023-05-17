@@ -50,7 +50,7 @@ def deleteWork(request, workId):
 
     return redirect('index')
 
-# 
+# Show all the infos of one work
 @login_required(login_url = 'login')
 def detailWork(request, workId):
     # Get the selected work
@@ -58,6 +58,30 @@ def detailWork(request, workId):
 
 
     return render(request, 'detailWork.html', context={"work": work})
+
+# Show all the infos of the house
+@login_required(login_url = 'login')
+def myHouse(request, userId):
+    # Get the user's house
+    house = t_house.objects.filter(idxUser=userId)
+
+    # Verify if the house exist, create the request and get the info if yes or redirect to the forms if not
+    if house.exists():
+        house = get_object_or_404(t_house, idxUser=userId)
+    else:
+        # ToDo : redirect to the forms
+        return redirect('index')
+
+
+    return render(request, 'myHome.html', context={"house": house})
+
+# Delete a house with the link
+@login_required(login_url = 'login')
+def deleteHouse(request, houseId):
+    house = get_object_or_404(t_house, pk=houseId)
+    house.delete()
+
+    return redirect('index')
 
 # Login fonction for users
 def loginUser(request):

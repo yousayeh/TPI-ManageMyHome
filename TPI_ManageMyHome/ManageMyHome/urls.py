@@ -9,4 +9,6 @@ urlpatterns = [
     path('register/', views.registerUser, name = 'register'),
     path('detailWork/<int:workId>', views.detailWork, name='detailWork'),
     path('deleteWork/<int:workId>', views.deleteWork, name='deleteWork'),
+    path('myHouse/<int:userId>', views.myHouse, name='myHouse'),
+    path('deleteHouse/<int:houseId>', views.deleteHouse, name='deleteHouse'),
 ]

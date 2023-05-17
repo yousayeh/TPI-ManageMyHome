@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="{% static 'resources/mcd1.png' %}" class="d-block w-100" alt="..." style="max-height: 461px;">
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'resources/mcd1.png' %}" class="d-block w-100" alt="..." style="max-height: 461px;">
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'resources/mcd1.png' %}" class="d-block w-100" alt="..." style="max-height: 461px;">
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+<div class="container">
+    <div class="btn-group" style="margin-top: 20px;">
+        <a href="#" class="btn btn-sm btn-outline-secondary">Modifier</a>
+        <a href="{% url 'deleteHouse' house.id %}" class="btn btn-sm btn-outline-secondary">Supprimer</a>
+    </div>
+    <table class="table">
+        <tbody>
+            <tr>
+                <td>Localité : </td>
+                <td>{{ house.houCity }}</td>
+            </tr>
+            <tr>
+                <td>No de parcelle :</td>
+                <td>{{ house.houPlot }}</td>
+            </tr>
+            <tr>
+                <td>Surface :</td>
+                <td>{{ house.houSurface }} m²</td>
+            </tr>
+            <tr>
+                <td>Année de construction :</td>
+                <td>{{ house.houConstructionYear }}</td>
+            </tr>
+            <tr>
+                <td>Etages :</td>
+                <td>{{ house.houFloor }}</td>
+            </tr>
+            <tr>
+                <td>Nombre de pièces :</td>
+                <td>{{ house.houRoom }}</td>
+            </tr>
+            <tr>
+                <td>Technologie de chauffage :</td>
+                <td>{{ house.idxHeaterTechnologie }}</td>
+            </tr>
+            <tr>
+                <td>Documents annexes :</td>
+                <td>
+                    {% comment %} ToDo : ajouter .url pour le lien, document.docFileUrl.url et boucle for{% endcomment %}
+                    <a href"#">liens</a><br>
+                    <a href"#">liens</a><br>
+                    <a href"#">liens</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+<style>
+    .baseBackgroung {
+        margin: 0;
+    }    
+</style>
+
+{% endblock content %}
