@@ -24,7 +24,11 @@
     <form method="POST" class="registerForm">
         {% csrf_token %}
         <h1>S'inscrire</h1>
-        {{ form.as_div }}
+        {% comment %} {% for field in form %}
+            <label for="test" class="form-label">{{ field.label }}</label>
+            {{ field }}
+        {% endfor %} {% endcomment %}
+        {{ form.as_p }}
         <input type="submit" class="btn btn-primary" value="S'inscrire">
         <p>Vous avez déjà un compte ? <a href="{% url 'login' %}">Se connecter</a></p>
     </form>

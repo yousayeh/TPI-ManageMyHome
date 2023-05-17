@@ -12,6 +12,9 @@ class t_user(AbstractUser):
 class t_heaterTechnologie(models.Model):
     heaName = models.CharField(max_length=128)
 
+    def __str__(self):
+        return f"{self.heaName}"
+
 # Model for the house
 class t_house(models.Model):
     idxUser = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -22,6 +25,9 @@ class t_house(models.Model):
     houFloor = models.IntegerField(default=0)
     houRoom = models.IntegerField(default=0)
     idxHeaterTechnologie = models.ForeignKey(t_heaterTechnologie, on_delete=models.RESTRICT)
+
+    def __str__(self):
+        return f"{self.id}"
 
 # Model for the documents
 class t_document(models.Model):
@@ -36,6 +42,10 @@ class t_picture(models.Model):
 # Model for the project
 class t_project(models.Model):
     proName = models.CharField(max_length=128)
+    idxUser = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.proName}"
 
 # Model for the link between t_house and t_project
 class t_provide(models.Model):
@@ -53,6 +63,9 @@ class t_company(models.Model):
     comEmail = models.EmailField(max_length=128)
     comImage = models.ImageField(upload_to="company", blank=True, null=True)
 
+    def __str__(self):
+        return f"{self.comName}"
+
 # Model for the contact
 class t_contact(models.Model):
     conFirstname = models.CharField(max_length=128)
@@ -61,6 +74,9 @@ class t_contact(models.Model):
     conEmail = models.EmailField(max_length=128)
     conPhone = models.IntegerField(default=0)
     idxCompany = models.ForeignKey(t_company, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.conFirstname}"
 
 # Model for the work
 class t_work(models.Model):
@@ -73,3 +89,6 @@ class t_work(models.Model):
     worBillUrl = models.FileField(upload_to="work/bill", blank=True, null=True)
     idxCompany = models.ForeignKey(t_company, on_delete=models.CASCADE)
     idxProject = models.ForeignKey(t_project, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.worName}"

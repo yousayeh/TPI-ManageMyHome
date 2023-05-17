@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+    <div class="btn-group">
+        <a href="#" class="btn btn-sm btn-outline-secondary">Ajouter</a>
+        <a href="#" class="btn btn-sm btn-outline-secondary">Modifier</a>
+    </div>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <td>Projet : </td>
+                <td>{{ work.idxProject }}</td>
+            </tr>
+            <tr>
+                <td>Nom des travaux :</td>
+                <td>{{ work.worName }}</td>
+            </tr>
+            <tr>
+                <td>Entreprise :</td>
+                <td>{{ work.idxCompany }}</td>
+            </tr>
+            <tr>
+                <td>Cout :</td>
+                <td>{{ work.worCost }} CHF</td>
+            </tr>
+            <tr>
+                <td>Durée :</td>
+                <td>du {{ work.worStart | date:"d F Y" }} au {{ work.worEnd | date:"d F Y" }}</td>
+            </tr>
+            <tr>
+                <td>Description :</td>
+                <td>{{ work.worDescription }}</td>
+            </tr>
+            <tr>
+                <td>Contrat :</td>
+                {% comment %} ToDo : ajouter .url pour le lien, work.worContract.url {% endcomment %}
+                <td><a href"{{ work.worContract }}">Lien vers le contrat</a></td>
+            </tr>
+            <tr>
+                <td>Facture :</td>
+                {% comment %} ToDo : ajouter .url pour le lien, work.worBillUrl.url {% endcomment %}
+                <td><a href"{{ work.worBillUrl }}">Lien vers la facture</a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+{% endblock content %}
