@@ -4,16 +4,11 @@
 
 <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner">
-      <div class="carousel-item active">
-        <img src="{% static 'resources/mcd1.png' %}" class="d-block w-100" alt="..." style="max-height: 461px;">
-      </div>
-      <div class="carousel-item">
-        <img src="{% static 'resources/mcd1.png' %}" class="d-block w-100" alt="..." style="max-height: 461px;">
-      </div>
-      <div class="carousel-item">
-        <img src="{% static 'resources/mcd1.png' %}" class="d-block w-100" alt="..." style="max-height: 461px;">
-      </div>
-    </div>
+        {% for picture in pictures %}
+            <div class="carousel-item {% if forloop.counter0 == 0 %}active{% endif %}">
+                <img src="{{ picture.picImage.url }}" class="d-block w-100" alt="House Images" style="max-height: 461px;">
+            </div>
+        {% endfor %}
     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Previous</span>
@@ -26,7 +21,7 @@
 
 <div class="container">
     <div class="btn-group" style="margin-top: 20px;">
-        <a href="#" class="btn btn-sm btn-outline-secondary">Modifier</a>
+        <a href="{% url 'updateHouse' house.id %}" class="btn btn-sm btn-outline-secondary">Modifier</a>
         <a href="{% url 'deleteHouse' house.id %}" class="btn btn-sm btn-outline-secondary">Supprimer</a>
     </div>
     <table class="table">
@@ -62,10 +57,9 @@
             <tr>
                 <td>Documents annexes :</td>
                 <td>
-                    {% comment %} ToDo : ajouter .url pour le lien, document.docFileUrl.url et boucle for{% endcomment %}
-                    <a href"#">liens</a><br>
-                    <a href"#">liens</a><br>
-                    <a href"#">liens</a>
+                    {% for document in documents %}
+                        <a href="{{ document.docFileUrl.url }}">{{ document.docFileUrl.url }}</a><br>
+                    {% endfor %}
                 </td>
             </tr>
         </tbody>

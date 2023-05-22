@@ -13,8 +13,9 @@
 <div class="album py-5 ">
     <div class="container">
       <div class="btn-group">
-        <p class="btn-sm btn-primary">Travaux</p>
-        <p class="btn-sm btn-success" style="margin-left: 20px;">Entreprises</p>
+        <a class="btn-sm btn-primary" style="text-decoration: none;">Travaux</a>
+        <a href="#" class="btn btn-sm btn-outline-primary" style="text-decoration: underline;">Ajouter</a>
+        <a class="btn-sm btn-success" style="margin-left: 20px; text-decoration: none;">Entreprises</a>
       </div>
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
         {% for work in works %}

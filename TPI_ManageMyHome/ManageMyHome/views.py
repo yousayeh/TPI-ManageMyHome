@@ -6,6 +6,7 @@ from django.contrib import messages
 from ManageMyHome.models import *
 from django.http import HttpResponse
 from django.db.models import Q
+import os
 
 # Send the index and get all the works from database.
 def index(request):
@@ -62,23 +63,133 @@ def detailWork(request, workId):
 # Show all the infos of the house
 @login_required(login_url = 'login')
 def myHouse(request, userId):
-    # Get the user's house
+    # Get the user's house 
     house = t_house.objects.filter(idxUser=userId)
+    # Get the user's house pictures
+    pictures = t_picture.objects.filter(idxHouse__in=house)
+    # Get the user's house documents
+    documents = t_document.objects.filter(idxHouse__in=house)
 
     # Verify if the house exist, create the request and get the info if yes or redirect to the forms if not
     if house.exists():
         house = get_object_or_404(t_house, idxUser=userId)
     else:
-        # ToDo : redirect to the forms
-        return redirect('index')
+        return redirect('addHouse')
 
 
-    return render(request, 'myHome.html', context={"house": house})
+    return render(request, 'myHome.html', context={"house": house, "pictures": pictures, "documents": documents})
+
+# Add the user's house with the house's images gallery and related documents
+@login_required(login_url = 'login')
+def addHouse(request):
+    # Get the current user
+    currentUser = request.user
+    # Create all the needed forms using forms.py
+    formHouse = HouseForm()
+    formPicture = PictureForm()
+    formDocument = DocumentForm()
+
+    # True if we're using POST method
+    if request.method == 'POST':
+        # Generate the main house form
+        formHouse = HouseForm(request.POST)
+        # Get all the files uploaded
+        images = request.FILES.getlist('picImage')
+        files = request.FILES.getlist('docFileUrl')
+
+        # Check for the forms validation
+        if formHouse.is_valid():
+
+            # Save the basic house data in the database
+            house = formHouse.save(commit=False)
+            house.idxUser = currentUser
+            house.save()
+
+            # Get the house's id
+            lastHouse = t_house.objects.filter(idxUser=request.user.id).latest('id')
+
+            # Add all the image's path in the database linked by the house's id
+            for image in images:
+                t_picture.objects.create(picImage=image, idxHouse=lastHouse)
+
+            # Add all the documents's path in the database linked by the house's id
+            for file in files:
+                t_document.objects.create(docFileUrl=file, idxHouse=lastHouse)
+
+            return redirect('myHouse', userId=request.user.id)
+
+    return render(request, 'addHouse.html', context={'formHouse': formHouse, 'formPicture': formPicture, 'formDocument': formDocument})
+
+# Update the house
+@login_required(login_url = 'login')
+def updateHouse(request, houseId):
+    # Get the house with the id
+    house = t_house.objects.get(pk=houseId)
+    # Get all the pictures for the house
+    images = t_picture.objects.filter(idxHouse=houseId)
+    # Get all the documents for the house
+    documents = t_document.objects.filter(idxHouse=houseId)
+
+    # Generate the Forms
+    formHouse = HouseForm(instance=house)
+    formPicture = PictureForm()
+    formDocument = DocumentForm()
+    
+
+    # True if we're using POST method
+    if request.method == 'POST':
+        # Generate the main house form
+        formHouse = HouseForm(request.POST, instance=house)
+        # Get all the files uploaded
+        imagesFiles = request.FILES.getlist('picImage')
+        files = request.FILES.getlist('docFileUrl')
+
+        # Check for the forms validation
+        if formHouse.is_valid():
+
+            if len(request.FILES) != 0:
+                if len(imagesFiles) > 0:
+                    for image in images:
+                        os.remove(image.picImage.path)
+                        image.delete()
+                for imageFile in imagesFiles:
+                    t_picture.objects.create(picImage=imageFile, idxHouse=house)
+
+                if len(files) > 0:
+                    for document in documents:
+                        os.remove(document.docFileUrl.path)
+                        document.delete()
+                for file in files:
+                    t_document.objects.create(docFileUrl=file, idxHouse=house)
+
+            formHouse.save()
+
+
+
+            return redirect('myHouse', userId=request.user.id)
+
+
+    return render(request, 'updateHouse.html', context={'formHouse': formHouse, 'formPicture': formPicture, 'formDocument': formDocument})
 
 # Delete a house with the link
 @login_required(login_url = 'login')
 def deleteHouse(request, houseId):
+    # Get the house wanted to be deleted
     house = get_object_or_404(t_house, pk=houseId)
+    # Get all the pictures for the house
+    images = t_picture.objects.filter(idxHouse=houseId)
+    # Get all the documents for the house
+    documents = t_document.objects.filter(idxHouse=houseId)
+
+    # Delete all the images stored in the house's directory
+    for image in images:
+        os.remove(image.picImage.path)
+
+    # Delete all the documents stored in the house's directory
+    for document in documents:
+        os.remove(document.docFileUrl.path)
+
+    # Delete the house
     house.delete()
 
     return redirect('index')

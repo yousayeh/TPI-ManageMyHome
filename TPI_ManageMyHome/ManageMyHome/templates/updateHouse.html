@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+
+    <form class="houseForm" method ="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h1>Modifier ma maison</h1>
+        {{ formHouse.as_p }}
+        {{ formDocument.as_p }}
+        {{ formPicture.as_p }}
+        <input type="submit" class="btn btn-primary" name="btnSubmit" value="Ajouter">
+    </form>
+
+<div>
+
+{% endblock content %}

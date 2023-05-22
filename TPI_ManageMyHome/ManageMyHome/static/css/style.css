@@ -25,3 +25,9 @@
 .table {
     margin: 20px 0 0 0;
 }
+
+/* Add house */
+
+.houseForm {
+    width: 50%;
+}

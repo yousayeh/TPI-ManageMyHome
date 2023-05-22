@@ -4,6 +4,15 @@ from django.conf.global_settings import *
 from django.conf import settings
 
 
+# Set the documents path and create a folder with the house's id
+def documentsPath(instance, filename):
+    return "house/documents/{0}/{1}".format(instance.idxHouse.id, filename)
+
+# Set the images path and create a folder with the house's id
+def imagesPath(instance, filename):
+    return "house/images/{0}/{1}".format(instance.idxHouse.id, filename)
+
+
 # Model for the users
 class t_user(AbstractUser):
     pass
@@ -31,12 +40,12 @@ class t_house(models.Model):
 
 # Model for the documents
 class t_document(models.Model):
-    docFileUrl = models.FileField(upload_to="house/documents", blank=True, null=True)
+    docFileUrl = models.FileField(upload_to=documentsPath, blank=True, null=True)
     idxHouse = models.ForeignKey(t_house, on_delete=models.CASCADE)
 
 # Model for the image gallery
 class t_picture(models.Model):
-    picImage = models.ImageField(upload_to="house/images", blank=True, null=True)
+    picImage = models.ImageField(upload_to=imagesPath, blank=True, null=True)
     idxHouse = models.ForeignKey(t_house, on_delete=models.CASCADE)
 
 # Model for the project
