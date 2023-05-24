@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% load static %}
 {% block content %}
 
 <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
@@ -22,7 +21,7 @@
 <div class="container">
     <div class="btn-group" style="margin-top: 20px;">
         <a href="{% url 'updateHouse' house.id %}" class="btn btn-sm btn-outline-secondary">Modifier</a>
-        <a href="{% url 'deleteHouse' house.id %}" class="btn btn-sm btn-outline-secondary">Supprimer</a>
+        <a href="{% url 'deleteHouse' house.id %}" class="btn btn-sm btn-outline-secondary" onclick="return confirm('Êtes vous sûr de vouloir supprimer ? Cette action est irréversible')">Supprimer</a>
     </div>
     <table class="table">
         <tbody>
@@ -65,13 +64,6 @@
         </tbody>
     </table>
 </div>
-
-
-
-
-
-
-
 
 <style>
     .baseBackgroung {

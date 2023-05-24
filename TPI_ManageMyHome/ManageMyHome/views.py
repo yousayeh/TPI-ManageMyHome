@@ -43,10 +43,111 @@ def index(request):
 
     return render(request, 'index.html', context={"works": works, "companies": companies})
 
+# Add the works
+@login_required(login_url = 'login')
+def addWorkProject(request):
+    # Get the current user
+    currentUser = request.user
+    # Create all the needed forms using forms.py
+    formWork = WorkForm(user=currentUser)
+    formProject = ProjectForm()
+
+    # True if we're using POST method
+    if request.method == 'POST':
+        # Check for wich form has been submitted
+        if 'btnSubmitWork' in request.POST:
+            # Generate work form
+            formWork = WorkForm(request.POST, request.FILES, user=currentUser)
+
+            # Check for the forms validation
+            if formWork.is_valid():
+
+                # Save the work data in the database
+                work = formWork.save(commit=False)
+                work.idxUser = currentUser
+                work.save()
+
+                return redirect('index')
+
+        if 'btnSubmitProject' in request.POST:
+            # Generate the project form
+            formProject = ProjectForm(request.POST)
+
+            # Check for the forms validation
+            if formProject.is_valid():
+                
+                # Save the work data in the database
+                project = formProject.save(commit=False)
+                project.idxUser = currentUser
+                project.save()
+
+                # Add the link between the projects and the house
+                lastHouse = t_house.objects.filter(idxUser=request.user.id).latest('id')
+                lastPoject = t_project.objects.filter(idxUser=request.user.id).last()
+
+                t_provide.objects.create(idxHouse=lastHouse, idxProject=lastPoject)
+
+                return redirect('addWorkProject')
+
+    return render(request, 'addWorkProject.html', context={'formWork': formWork, 'formProject': formProject})
+
+# Update the works
+@login_required(login_url = 'login')
+def updateWork(request, workId):
+    # Get the current user
+    currentUser = request.user
+    # Get the work with the id
+    work = t_work.objects.get(pk=workId)
+
+    # Create form using forms.py
+    formWork = WorkForm(instance=work, user=currentUser)
+    
+    # True if we're using POST method
+    if request.method == 'POST':
+        # Generate the form
+        formWork = WorkForm(request.POST, request.FILES, instance=work, user=currentUser)
+
+        # Get the contract and bill path
+        pathContract = work.worContract.path
+        pathBill = work.worBillUrl.path
+
+        # Get all the files uploaded
+        contract = request.FILES.getlist('worContract')
+        bill = request.FILES.getlist('worBillUrl')
+
+        # Check for the form validation
+        if formWork.is_valid():
+
+            # Check if the user uploaded new files
+            if len(request.FILES) != 0:
+                # Delete the old file
+                if len(contract) > 0:
+                    os.remove(pathContract)
+
+                if len(bill) > 0:
+                    os.remove(pathBill)
+
+            # Save the data in database
+            formWork.save()
+
+            return redirect('index')
+
+
+    return render(request, 'updateWork.html', context={'formWork': formWork})
+
 # Delete a work with the link
 @login_required(login_url = 'login')
 def deleteWork(request, workId):
+    # Get the work wanted to be deleted
     work = get_object_or_404(t_work, pk=workId)
+
+    # Delete the contract stored in the work's directory
+    os.remove(work.worContract.path)
+
+    # Delete the bill stored in the work's directory
+    os.remove(work.worBillUrl.path)
+
+    # Delete the work
     work.delete()
 
     return redirect('index')
@@ -59,6 +160,41 @@ def detailWork(request, workId):
 
 
     return render(request, 'detailWork.html', context={"work": work})
+
+# Update the project
+@login_required(login_url = 'login')
+def updateProject(request, projectId):
+    # Get the project with the id
+    project = t_project.objects.get(pk=projectId)
+
+    # Create form using forms.py
+    form = ProjectForm(instance=project)
+
+    # True if we're using POST method
+    if request.method == 'POST':
+        # Generate the form
+        form = ProjectForm(request.POST, instance=project)
+
+        # Check for the form validation
+        if form.is_valid():
+
+            # Save the project data in the database
+            form.save()
+
+            return redirect('index')
+
+    return render(request, 'updateProject.html', context={'form': form})
+
+# Delete a project with the link
+@login_required(login_url = 'login')
+def deleteProject(request, projectId):
+    # Get the project wanted to be deleted
+    project = get_object_or_404(t_project, pk=projectId)
+
+    # Delete the project 
+    project.delete()
+
+    return redirect('index')
 
 # Show all the infos of the house
 @login_required(login_url = 'login')
@@ -120,7 +256,7 @@ def addHouse(request):
 
     return render(request, 'addHouse.html', context={'formHouse': formHouse, 'formPicture': formPicture, 'formDocument': formDocument})
 
-# Update the house
+# Update the user's house with the house's images gallery and related documents
 @login_required(login_url = 'login')
 def updateHouse(request, houseId):
     # Get the house with the id
@@ -134,7 +270,6 @@ def updateHouse(request, houseId):
     formHouse = HouseForm(instance=house)
     formPicture = PictureForm()
     formDocument = DocumentForm()
-    
 
     # True if we're using POST method
     if request.method == 'POST':
@@ -147,24 +282,28 @@ def updateHouse(request, houseId):
         # Check for the forms validation
         if formHouse.is_valid():
 
-            if len(request.FILES) != 0:
+            # Check if the user uploaded new files
+            if len(request.FILES) != 0: 
                 if len(imagesFiles) > 0:
+                    # Delete the images stored and the URL record in the database 
                     for image in images:
                         os.remove(image.picImage.path)
                         image.delete()
+                # Add the new images
                 for imageFile in imagesFiles:
                     t_picture.objects.create(picImage=imageFile, idxHouse=house)
 
                 if len(files) > 0:
+                    # Delete the documents stored and the URL record in the database 
                     for document in documents:
                         os.remove(document.docFileUrl.path)
                         document.delete()
+                # Add the new documents
                 for file in files:
                     t_document.objects.create(docFileUrl=file, idxHouse=house)
 
+            # Save the data in database
             formHouse.save()
-
-
 
             return redirect('myHouse', userId=request.user.id)
 

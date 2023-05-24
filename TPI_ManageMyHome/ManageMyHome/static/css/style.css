@@ -28,6 +28,19 @@
 
 /* Add house */
 
-.houseForm {
-    width: 50%;
+.houseForm, .workFormUpdate, .projectFormUpdate {
+    width: 30%;
+}
+
+/* Add work project */
+
+.formsContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+#worContract-clear_id, #worBillUrl-clear_id, .workFormUpdate > p:nth-child(9) > label[for="worContract-clear_id"], .workFormUpdate > p:nth-child(10) > label[for="worBillUrl-clear_id"] {
+    display: none;
 }

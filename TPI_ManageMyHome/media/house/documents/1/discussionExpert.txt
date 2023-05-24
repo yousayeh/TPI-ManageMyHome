@@ -1,0 +1,19 @@
+jdt en pdf
+jdt mercredi et vendredi
+rapport seulement vendredi les deux en pdf
+mention dans le rapport des changement eventuel du cdc
+
+
+gestion user : pas log vu seulement, log tout (vue, delete, add, update)
+
+saisie des informations : CRUD
+
+statistiques : "2. La somme des dépenses par domaine" --> faire histogramme
+
+mise en ligne : demande des accès
+
+Validation en JS : pas nécessaire si une proposition autre fonctionne aussi /!\ à mentionner dans le rapport
+
+
+
+largeur colonne excel : 106,43 

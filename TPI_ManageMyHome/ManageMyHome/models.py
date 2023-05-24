@@ -12,6 +12,14 @@ def documentsPath(instance, filename):
 def imagesPath(instance, filename):
     return "house/images/{0}/{1}".format(instance.idxHouse.id, filename)
 
+# Set the contract path and create a folder with the username
+def contractPath(instance, filename):
+    return "work/contract/{0}/{1}".format(instance.idxProject.idxUser.username, filename)
+
+# Set the bill path and create a folder with the username
+def billPath(instance, filename):
+    return "work/bill/{0}/{1}".format(instance.idxProject.idxUser.username, filename)
+
 
 # Model for the users
 class t_user(AbstractUser):
@@ -89,15 +97,16 @@ class t_contact(models.Model):
 
 # Model for the work
 class t_work(models.Model):
+    idxProject = models.ForeignKey(t_project, on_delete=models.CASCADE)
     worName = models.CharField(max_length=128)
-    worCost = models.DecimalField(max_digits=8, decimal_places=2)
+    worCost = models.DecimalField(max_digits=8, decimal_places=2, default=0.0)
     worDescription = models.TextField(blank=False)
     worStart = models.DateField()
     worEnd = models.DateField()
-    worContract = models.FileField(upload_to="work/contract", blank=True, null=True)
-    worBillUrl = models.FileField(upload_to="work/bill", blank=True, null=True)
+    worContract = models.FileField(upload_to=contractPath, blank=True, null=True)
+    worBillUrl = models.FileField(upload_to=billPath, blank=True, null=True)
     idxCompany = models.ForeignKey(t_company, on_delete=models.CASCADE)
-    idxProject = models.ForeignKey(t_project, on_delete=models.CASCADE)
+    
 
     def __str__(self):
         return f"{self.worName}"
