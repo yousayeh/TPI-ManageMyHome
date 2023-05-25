@@ -44,3 +44,42 @@
 #worContract-clear_id, #worBillUrl-clear_id, .workFormUpdate > p:nth-child(9) > label[for="worContract-clear_id"], .workFormUpdate > p:nth-child(10) > label[for="worBillUrl-clear_id"] {
     display: none;
 }
+
+/* Companies */
+
+.contactInfo p {
+    margin: 0;
+}
+
+.contactInfo {
+    margin: 0 0 0 20px;
+}
+
+.contactContainer {
+    display: flex;
+    align-items: center;
+    margin: 20px 0 0 0;
+}
+
+.contactIcon svg {
+    width: 64px;
+    height: 64px;
+}
+
+.contactContent {
+    display: flex;
+    flex-direction: column;
+    height: 296px;
+    overflow: auto;
+    margin: 0 20px 0 20px;
+}
+
+.contactIcon {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.actionContact {
+    margin: -10px 0 0 0;
+}

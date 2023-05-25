@@ -20,6 +20,10 @@ def contractPath(instance, filename):
 def billPath(instance, filename):
     return "work/bill/{0}/{1}".format(instance.idxProject.idxUser.username, filename)
 
+# Set the logo path and create a folder with the company name
+def logoPath(instance, filename):
+    return "company/{0}/{1}".format(instance.comName, filename)
+
 
 # Model for the users
 class t_user(AbstractUser):
@@ -76,9 +80,9 @@ class t_company(models.Model):
     comZip = models.IntegerField(default=0)
     comCity = models.CharField(max_length=128)
     comDomain = models.CharField(max_length=128)
-    comPhone = models.IntegerField(default=0)
+    comPhone = models.IntegerField()
     comEmail = models.EmailField(max_length=128)
-    comImage = models.ImageField(upload_to="company", blank=True, null=True)
+    comImage = models.ImageField(upload_to=logoPath, blank=False, null=False)
 
     def __str__(self):
         return f"{self.comName}"
@@ -89,11 +93,11 @@ class t_contact(models.Model):
     conLastname = models.CharField(max_length=128)
     conFunction = models.CharField(max_length=128)
     conEmail = models.EmailField(max_length=128)
-    conPhone = models.IntegerField(default=0)
+    conPhone = models.IntegerField()
     idxCompany = models.ForeignKey(t_company, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.conFirstname}"
+        return f"{self.conFirstname} {self.conLastname}"
 
 # Model for the work
 class t_work(models.Model):
@@ -103,8 +107,8 @@ class t_work(models.Model):
     worDescription = models.TextField(blank=False)
     worStart = models.DateField()
     worEnd = models.DateField()
-    worContract = models.FileField(upload_to=contractPath, blank=True, null=True)
-    worBillUrl = models.FileField(upload_to=billPath, blank=True, null=True)
+    worContract = models.FileField(upload_to=contractPath, blank=False, null=False)
+    worBillUrl = models.FileField(upload_to=billPath, blank=False, null=False)
     idxCompany = models.ForeignKey(t_company, on_delete=models.CASCADE)
     
 

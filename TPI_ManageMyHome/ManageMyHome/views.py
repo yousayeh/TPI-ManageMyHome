@@ -76,7 +76,7 @@ def addWorkProject(request):
             # Check for the forms validation
             if formProject.is_valid():
                 
-                # Save the work data in the database
+                # Save the project data in the database
                 project = formProject.save(commit=False)
                 project.idxUser = currentUser
                 project.save()
@@ -319,6 +319,7 @@ def deleteHouse(request, houseId):
     images = t_picture.objects.filter(idxHouse=houseId)
     # Get all the documents for the house
     documents = t_document.objects.filter(idxHouse=houseId)
+    # ToDo : Delete the projects too ?
 
     # Delete all the images stored in the house's directory
     for image in images:
@@ -332,6 +333,55 @@ def deleteHouse(request, houseId):
     house.delete()
 
     return redirect('index')
+
+# List all the companies
+@login_required(login_url = 'login')
+def listCompanies(request):
+    # Get all the companies
+    companies = t_company.objects.all()
+    # Get all the contacts
+    contacts = t_contact.objects.all()
+
+    return render(request, 'listCompanies.html', context={'companies': companies, 'contacts': contacts})
+
+# Add a company or a contact
+@login_required(login_url = 'login')
+def addCompanyContact(request):
+    # Create all the needed forms using forms.py
+    formComany = CompanyForm()
+    formContact = ContactForm()
+
+    # True if we're using POST method
+    if request.method == 'POST':
+
+        # Check for wich form has been submitted
+        if 'btnSubmitCompany' in request.POST:
+
+            # Generate company form
+            formComany = CompanyForm(request.POST, request.FILES)
+
+            # Check for the forms validation
+            if formComany.is_valid():
+
+                # Save the company data in the database
+                formComany.save()
+
+                return redirect('listCompanies')
+
+        if 'btnSubmitConact' in request.POST:
+
+            # Generate the contact form
+            formContact = ContactForm(request.POST)
+
+            # Check for the forms validation
+            if formContact.is_valid():
+                
+                # Save the contact data in the database
+                formContact.save()
+
+                return redirect('listCompanies')
+
+    return render(request, 'addCompanyContact.html', context={'formComany': formComany, 'formContact': formContact})
 
 # Login fonction for users
 def loginUser(request):

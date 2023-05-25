@@ -165,3 +165,59 @@ class ProjectForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProjectForm, self).__init__(*args, **kwargs)
         self.fields['proName'].widget.attrs.update({'class': 'form-control'})
+
+# Forms of the Company
+class CompanyForm(forms.ModelForm):
+
+    class Meta:
+        model = t_company
+        fields = '__all__'
+
+        name = forms.CharField(max_length=128)
+        adress = forms.CharField(max_length=128)
+        zip = forms.IntegerField()
+        city = forms.CharField(max_length=128)
+        domain = forms.CharField(max_length=128)
+        phone = forms.IntegerField()
+        email = forms.EmailField()
+        image = forms.ImageField()
+
+        # Name correctly the label with the wanted text label
+        labels = {
+            'comName' : 'Nom',
+            'comAdress' : 'Adresse', 
+            'comZip' : 'NPA', 
+            'comCity' : 'Localité', 
+            'comDomain' : "Domaine d'activité",
+            'comPhone' : 'Téléphone',
+            'comEmail' : 'Email',
+            'comImage' : 'Logo',
+        }
+
+# Forms of the contact
+class ContactForm(forms.ModelForm):
+
+    class Meta:
+        model = t_contact
+        fields = '__all__'
+
+        firstname = forms.CharField(max_length=128)
+        lastname = forms.CharField(max_length=128)
+        function = forms.CharField(max_length=128)
+        email = forms.EmailField()
+        phone = forms.IntegerField()
+        company = forms.MultipleChoiceField()
+
+        # Name correctly the label with the wanted text label
+        labels = {
+            'conFirstname' : 'Prénom',
+            'conLastname' : 'Nom',
+            'conFunction' : 'Fonction',
+            'conEmail' : 'Email',
+            'conPhone' : 'Téléphone',
+            'idxCompany' : 'Entreprise'
+        }
+
+    # def __init__(self, *args, **kwargs):
+    #     super(ContactForm, self).__init__(*args, **kwargs)
+    #     self.fields['idxCompany'].queryset = t_company.objects.all()

@@ -57,7 +57,11 @@
                 <td>Documents annexes :</td>
                 <td>
                     {% for document in documents %}
-                        <a href="{{ document.docFileUrl.url }}">{{ document.docFileUrl.url }}</a><br>
+                        {% if document.docFileUrl %}
+                            <a href="{{ document.docFileUrl.url }}">{{ document.docFileUrl.url }}</a><br>
+                        {% else %}
+                            Aucun fichier
+                        {% endif %}
                     {% endfor %}
                 </td>
             </tr>

@@ -45,11 +45,19 @@
             </tr>
             <tr>
                 <td>Contrat :</td>
-                <td><a href="{{ work.worContract.url }}">{{ work.worContract.url }}</a></td>
+                {% if work.worContract %}
+                    <td><a href="{{ work.worContract.url }}">{{ work.worContract.url }}</a></td>
+                {% else %}
+                    <td>Aucun fichier</td>
+                {% endif %}
             </tr>
             <tr>
                 <td>Facture :</td>
-                <td><a href="{{ work.worBillUrl.url }}">{{ work.worBillUrl.url }}</a></td>
+                {% if work.worBillUrl %}
+                    <td><a href="{{ work.worBillUrl.url }}">{{ work.worBillUrl.url }}</a></td>
+                {% else %}
+                    <td>Aucun fichier</td>
+                {% endif %}
             </tr>
         </tbody>
     </table>
