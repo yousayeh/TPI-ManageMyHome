@@ -348,7 +348,7 @@ def listCompanies(request):
 @login_required(login_url = 'login')
 def addCompanyContact(request):
     # Create all the needed forms using forms.py
-    formComany = CompanyForm()
+    formCompany = CompanyForm()
     formContact = ContactForm()
 
     # True if we're using POST method
@@ -358,13 +358,13 @@ def addCompanyContact(request):
         if 'btnSubmitCompany' in request.POST:
 
             # Generate company form
-            formComany = CompanyForm(request.POST, request.FILES)
+            formCompany = CompanyForm(request.POST, request.FILES)
 
             # Check for the forms validation
-            if formComany.is_valid():
+            if formCompany.is_valid():
 
                 # Save the company data in the database
-                formComany.save()
+                formCompany.save()
 
                 return redirect('listCompanies')
 
@@ -381,7 +381,67 @@ def addCompanyContact(request):
 
                 return redirect('listCompanies')
 
-    return render(request, 'addCompanyContact.html', context={'formComany': formComany, 'formContact': formContact})
+    return render(request, 'addCompanyContact.html', context={'formComany': formCompany, 'formContact': formContact})
+
+# Update the company
+@login_required(login_url = 'login')
+def updateCompany(request, companyId):
+    # Get the company with the id
+    company = t_company.objects.get(pk=companyId)
+
+    # Create form using forms.py
+    form = CompanyForm(instance=company)
+    
+    # True if we're using POST method
+    if request.method == 'POST':
+
+        # Generate the form
+        form = CompanyForm(request.POST, request.FILES, instance=company)
+
+        # Get the contract and bill path
+        pathLogo = company.comImage.path
+
+        # Get all the files uploaded
+        logo = request.FILES.getlist('comImage')
+
+        if form.is_valid():
+
+            # Check if the user uploaded new files
+            if len(request.FILES) != 0:
+                # Delete the old file
+                if len(logo) > 0:
+                    os.remove(pathLogo)
+
+            # Save the company updated data in the database
+            form.save()
+
+            return redirect('listCompanies')
+
+    return render(request, 'updateCompany.html', context={'form': form})
+
+# Update the contact
+@login_required(login_url = 'login')
+def updateContact(request, contactId):
+    # Get the contact with the id
+    contact = t_contact.objects.get(pk=contactId)
+
+    # Create form using forms.py
+    form = ContactForm(instance=contact)
+    
+    # True if we're using POST method
+    if request.method == 'POST':
+
+        # Generate the form
+        form = ContactForm(request.POST, instance=contact)
+
+        if form.is_valid():
+
+            # Save the contact updated data in the database
+            form.save()
+
+            return redirect('listCompanies')
+
+    return render(request, 'updateContact.html', context={'form': form})
 
 # Login fonction for users
 def loginUser(request):

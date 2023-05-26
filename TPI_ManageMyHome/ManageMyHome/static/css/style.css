@@ -69,9 +69,10 @@
 .contactContent {
     display: flex;
     flex-direction: column;
-    height: 296px;
+    max-height: 296px;
     overflow: auto;
     margin: 0 20px 0 20px;
+    justify-content: center;
 }
 
 .contactIcon {
@@ -82,4 +83,33 @@
 
 .actionContact {
     margin: -10px 0 0 0;
+    display: flex;
 }
+
+.companyInfo {
+    margin: 0 0 0 30px;
+}
+
+@media (max-width: 991px) { 
+    .addButton {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) { 
+    .formsContainer {
+        flex-direction: column;
+    }
+
+    .projectForm, .contactForm {
+        margin: 100px 0 0 0;
+    }
+
+    .houseForm, .workFormUpdate, .projectFormUpdate {
+        width: 100%;
+    }
+
+    .cardContent {
+        flex-direction: column;
+    }
+ }

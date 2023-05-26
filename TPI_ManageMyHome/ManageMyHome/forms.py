@@ -194,6 +194,17 @@ class CompanyForm(forms.ModelForm):
             'comImage' : 'Logo',
         }
 
+    def __init__(self, *args, **kwargs):
+        super(CompanyForm, self).__init__(*args, **kwargs)
+        self.fields['comName'].widget.attrs.update({'class': 'form-control'})
+        self.fields['comAdress'].widget.attrs.update({'class': 'form-control'})
+        self.fields['comZip'].widget.attrs.update({'class': 'form-control'})
+        self.fields['comCity'].widget.attrs.update({'class': 'form-control'})
+        self.fields['comDomain'].widget.attrs.update({'class': 'form-control'})
+        self.fields['comPhone'].widget.attrs.update({'class': 'form-control'})
+        self.fields['comEmail'].widget.attrs.update({'class': 'form-control'})
+        self.fields['comImage'].widget.attrs.update({'class': 'form-control'})
+
 # Forms of the contact
 class ContactForm(forms.ModelForm):
 
@@ -218,6 +229,11 @@ class ContactForm(forms.ModelForm):
             'idxCompany' : 'Entreprise'
         }
 
-    # def __init__(self, *args, **kwargs):
-    #     super(ContactForm, self).__init__(*args, **kwargs)
-    #     self.fields['idxCompany'].queryset = t_company.objects.all()
+    def __init__(self, *args, **kwargs):
+        super(ContactForm, self).__init__(*args, **kwargs)
+        self.fields['conFirstname'].widget.attrs.update({'class': 'form-control'})
+        self.fields['conLastname'].widget.attrs.update({'class': 'form-control'})
+        self.fields['conFunction'].widget.attrs.update({'class': 'form-control'})
+        self.fields['conEmail'].widget.attrs.update({'class': 'form-control'})
+        self.fields['conPhone'].widget.attrs.update({'class': 'form-control'})
+        self.fields['idxCompany'].widget.attrs.update({'class': 'form-control'})
