@@ -7,6 +7,10 @@ from ManageMyHome.models import *
 from django.http import HttpResponse
 from django.db.models import Q
 import os
+from django.db.models import Sum
+from django.db.models.functions import ExtractYear
+from django.db.models import Count
+import datetime
 
 # Send the index and get all the works from database.
 def index(request):
@@ -67,7 +71,7 @@ def addWorkProject(request):
                 work.idxUser = currentUser
                 work.save()
 
-                return redirect('index')
+                return redirect('addWorkProject')
 
         if 'btnSubmitProject' in request.POST:
             # Generate the project form
@@ -335,7 +339,6 @@ def deleteHouse(request, houseId):
     return redirect('index')
 
 # List all the companies
-@login_required(login_url = 'login')
 def listCompanies(request):
     # Get all the companies
     companies = t_company.objects.all()
@@ -419,6 +422,20 @@ def updateCompany(request, companyId):
 
     return render(request, 'updateCompany.html', context={'form': form})
 
+# Delete a company with the link
+@login_required(login_url = 'login')
+def deleteCompany(request, companyId):
+    # Get the company wanted to be deleted
+    company = get_object_or_404(t_company, pk=companyId)
+
+    # Delete the image stored in the company's directory
+    os.remove(company.comImage.path)
+
+    # Delete the company
+    company.delete()
+
+    return redirect('listCompanies')
+
 # Update the contact
 @login_required(login_url = 'login')
 def updateContact(request, contactId):
@@ -442,6 +459,73 @@ def updateContact(request, contactId):
             return redirect('listCompanies')
 
     return render(request, 'updateContact.html', context={'form': form})
+
+# Delete a contact with the link
+@login_required(login_url = 'login')
+def deleteContact(request, contactId):
+    # Get the contact wanted to be deleted
+    contact = get_object_or_404(t_contact, pk=contactId)
+
+    # Delete the contact
+    contact.delete()
+
+    return redirect('listCompanies')
+
+# Statistics page
+@login_required(login_url = 'login')
+def statistics(request):
+    # Get the current user
+    user = request.user
+    # Get the user's project
+    projects = t_project.objects.filter(idxUser=user)
+    # Get the user's project
+    works = t_work.objects.filter(idxProject__in=projects)
+
+    # Get the cost by year
+    woksCost = t_work.objects.annotate(year=ExtractYear('worStart')).values('year').annotate(totalCost=Sum('worCost')).filter(idxProject__in=projects)
+
+    # Get the number of intervention by year
+    woksIntervention = t_work.objects.annotate(year=ExtractYear('worStart')).values('year').annotate(totalIntervention=Count('id')).filter(idxProject__in=projects)
+
+    # List of the works order by years
+    worksByYear = t_work.objects.filter(idxProject__in=projects).filter(worStart__year=datetime.date.today().year).order_by('worStart')
+
+    # Get the cost by domain
+    domainCost = t_company.objects.filter(t_work__idxProject__idxUser=user).annotate(totalCost=Sum('t_work__worCost')).values('comDomain', 'totalCost')
+
+    # Lists for the years and verify the duplicates
+    years = []
+    allYears = [] 
+    duplist = []
+
+    # Lists for the ChartJS graphics
+    labels = []
+    data = []
+    # Add the company's domain in the label list and the total amount of cost in the data list
+    for result in domainCost:
+        labels.append(result['comDomain'])
+        data.append(str(result['totalCost']))
+
+    # Add all the years in the data list
+    for work in works:
+        years.append(work.worStart.year)
+
+    # Check for the duplicates
+    for i in years:
+        if i not in allYears:
+            allYears.append(i)
+            allYears.sort()
+        else:
+            duplist.append(i)
+
+    # True if we're using POST and that the form is valid
+    if request.method == 'POST':
+        year = request.POST['worYear']
+        # List of the works by years order by chronologically
+        worksByYear = t_work.objects.filter(idxProject__in=projects).filter(worStart__year=year).order_by('worStart')
+    
+
+    return render(request, 'statistics.html', context={'woksCost': woksCost, 'woksIntervention': woksIntervention, 'worksByYear': worksByYear, 'labels': labels, 'data': data, 'allYears': allYears})
 
 # Login fonction for users
 def loginUser(request):

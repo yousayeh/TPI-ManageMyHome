@@ -16,6 +16,7 @@
       <a class="btn-sm btn-primary" style="text-decoration: none;">Travaux</a>
       <a href="{% url 'addWorkProject' %}" class="btn btn-sm btn-outline-primary" style="text-decoration: underline;">Ajouter</a>
       <a class="btn-sm btn-success" style="margin-left: 20px; text-decoration: none;">Entreprises</a>
+      <a href="{% url 'listCompanies' %}" class="btn btn-sm btn-outline-success" style="text-decoration: underline;">Voir</a>
     </div>
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" style="margin-top: 50px;">
       {% for work in works %}
@@ -46,13 +47,6 @@
             <div class="card-body">
               <p class="card-text">+41 {{ company.comPhone }}</p>
               <p class="card-text"><a href="mailto:{{ company.comEmail }}">{{ company.comEmail }}</a></p>
-              <div class="d-flex justify-content-between align-items-center">
-                {% if request.user.is_authenticated %}
-                  <div class="btn-group">
-                    <a href="{% url 'listCompanies' %}" class="btn btn-sm btn-outline-secondary">Voir</a>
-                  </div>
-                {% endif %}
-              </div>
             </div>
           </div>
         </div>

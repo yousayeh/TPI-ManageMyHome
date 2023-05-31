@@ -20,5 +20,8 @@ urlpatterns = [
     path('listCompanies/', views.listCompanies, name='listCompanies'),
     path('addCompanyContact/', views.addCompanyContact, name='addCompanyContact'),
     path('updateCompany/<int:companyId>', views.updateCompany, name='updateCompany'),
-    path('updateContact/<int:contactId>', views.updateContact, name='updateContact')
+    path('deleteCompany/<int:companyId>', views.deleteCompany, name='deleteCompany'),
+    path('updateContact/<int:contactId>', views.updateContact, name='updateContact'),
+    path('deleteContact/<int:contactId>', views.deleteContact, name='deleteContact'),
+    path('statistics', views.statistics, name='statistics')
 ]

@@ -90,6 +90,29 @@
     margin: 0 0 0 30px;
 }
 
+/* Statistics */
+
+.statContent {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.statContent > div > div {
+    margin: 75px 0 0 0;
+}
+
+
+
+/* Responsive Design */
+
+@media (max-width: 1200px) { 
+    .statContent > div {
+        width: 100% !important;
+    }
+}
+
 @media (max-width: 991px) { 
     .addButton {
         width: 100%;
