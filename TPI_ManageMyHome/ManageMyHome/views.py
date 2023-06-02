@@ -17,7 +17,7 @@ def index(request):
     # Get the current user's id
     user = request.user.id
 
-    if user is not None:
+    if request.user.is_authenticated:
         # Get the current user
         user = request.user
         # Get all the projects created by user
@@ -27,25 +27,32 @@ def index(request):
 
         # Get all the companies
         companies = t_company.objects.all()
+        # Get all the contacts
+        contacts = t_contact.objects.all()
 
-        # Allows the user to research a work or a company
+        # Allows the user to research a work or a company or a contact
         if request.method == "POST":
             searched = request.POST['search']
             works = t_work.objects.filter(worName__contains=searched).filter(idxProject__in=projects)
             companies = t_company.objects.filter(comName__contains=searched)
+            contacts = t_contact.objects.filter(Q(conFirstname__contains=searched) | Q(conLastname__contains=searched))
+
     else :
         # Get all the works
         works = t_work.objects.all()
         # Get all the companies
         companies = t_company.objects.all()
+        # Get all the contacts
+        contacts = t_contact.objects.all()
 
-        # Allows the user to research a work or a company
+        # Allows the user to research a work or a company or a contact
         if request.method == "POST":
             searched = request.POST['search']
             works = t_work.objects.filter(worName__contains=searched)
             companies = t_company.objects.filter(comName__contains=searched)
+            contacts = t_contact.objects.filter(Q(conFirstname__contains=searched) | Q(conLastname__contains=searched))
 
-    return render(request, 'index.html', context={"works": works, "companies": companies})
+    return render(request, 'index.html', context={"works": works, "companies": companies, 'contacts': contacts})
 
 # Add the works
 @login_required(login_url = 'login')

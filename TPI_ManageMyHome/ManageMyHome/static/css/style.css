@@ -20,6 +20,12 @@
     margin: 20px 0 0 0;
 }
 
+/* Index */
+
+.linkExcept:hover {
+    color: white !important;
+}
+
 /* Detail Work */
 
 .table {
@@ -116,6 +122,15 @@
 @media (max-width: 991px) { 
     .addButton {
         width: 100%;
+    }
+
+    .containerIndex {
+        display: flex;
+        flex-direction: column !important;
+    }
+
+    .colIndex {
+        width: 100% !important;
     }
 }
 

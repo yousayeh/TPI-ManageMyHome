@@ -23,8 +23,6 @@
                     <li class="nav-item">
                         {% if request.user.is_authenticated %}
                             <a class="nav-link" href="{% url 'myHouse' request.user.id %}">Ma maison</a>
-                        {% comment %} {% else %}
-                            <a class="nav-link" href="{% url 'login' %}">Se connecter</a> {% endcomment %}
                         {% endif %}
                     </li>
                     <li class="nav-item">

@@ -61,7 +61,7 @@
                 <form method ="POST" class="d-flex justify-content-between">
                     {% csrf_token %}
                     <select name="worYear" class="form-control w-75">
-                        <option value="">---- Choisissez une année ----</option>
+                        <option value="{% now "Y" %}">---- Choisissez une année ----</option>
                         {% for year in allYears %}
                             <option value="{{ year }}">{{ year }}</option>
                         {% endfor %}
