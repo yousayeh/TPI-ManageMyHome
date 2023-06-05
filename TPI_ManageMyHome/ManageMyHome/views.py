@@ -78,7 +78,7 @@ def addWorkProject(request):
                 work.idxUser = currentUser
                 work.save()
 
-                return redirect('addWorkProject')
+                return redirect('index')
 
         if 'btnSubmitProject' in request.POST:
             # Generate the project form
@@ -92,13 +92,7 @@ def addWorkProject(request):
                 project.idxUser = currentUser
                 project.save()
 
-                # Add the link between the projects and the house
-                lastHouse = t_house.objects.filter(idxUser=request.user.id).latest('id')
-                lastPoject = t_project.objects.filter(idxUser=request.user.id).last()
-
-                t_provide.objects.create(idxHouse=lastHouse, idxProject=lastPoject)
-
-                return redirect('addWorkProject')
+                return redirect('index')
 
     return render(request, 'addWorkProject.html', context={'formWork': formWork, 'formProject': formProject})
 
@@ -537,6 +531,7 @@ def statistics(request):
 # Login fonction for users
 def loginUser(request):
     page = 'login'
+
     # True if we're using POST and that the form is valid
     if request.method == 'POST':
         username = request.POST['username']
@@ -547,6 +542,7 @@ def loginUser(request):
         # Authenticate the user after if he exist
         if user is not None:
             login(request, user)
+
             return redirect('index')
         else:
             messages.error(request, "Identifiant ou mot de passe incorrect.")

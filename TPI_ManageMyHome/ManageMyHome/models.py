@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf.global_settings import *
 from django.conf import settings
+from django.core.validators import RegexValidator
 
 
 # Set the documents path and create a folder with the house's id
@@ -23,6 +24,11 @@ def billPath(instance, filename):
 # Set the logo path and create a folder with the company name
 def logoPath(instance, filename):
     return "company/{0}/{1}".format(instance.comName, filename)
+
+# Regex for company name and phone numbers
+alphanumericValidator = RegexValidator(r'^[A-Za-z0-9 -]*[A-Za-z0-9][A-Za-z0-9 -]*$', 'Seule les caractères alphanumeric et les tirets sont autorisées')
+phoneNumberValidator = RegexValidator(r'(\+41|0041|0){1}(\(0\))?[0-9]{2}[\s.-]?[0-9]{3}[\s.-]?[0-9]{2}[\s.-]?[0-9]{2}$', 'Veuillez entrez un numéro de téléphone suisse valide.')
+
 
 
 # Model for the users
@@ -75,12 +81,12 @@ class t_provide(models.Model):
 
 # Model for the company
 class t_company(models.Model):
-    comName = models.CharField(max_length=128)
+    comName = models.CharField(max_length=128, validators=[alphanumericValidator])
     comAdress = models.CharField(max_length=128)
     comZip = models.IntegerField(default=0)
     comCity = models.CharField(max_length=128)
     comDomain = models.CharField(max_length=128)
-    comPhone = models.IntegerField()
+    comPhone = models.CharField(max_length=16, validators=[phoneNumberValidator])
     comEmail = models.EmailField(max_length=128)
     comImage = models.ImageField(upload_to=logoPath, blank=False, null=False)
 
@@ -93,7 +99,7 @@ class t_contact(models.Model):
     conLastname = models.CharField(max_length=128)
     conFunction = models.CharField(max_length=128)
     conEmail = models.EmailField(max_length=128)
-    conPhone = models.IntegerField()
+    conPhone = models.CharField(max_length=16, validators=[phoneNumberValidator])
     idxCompany = models.ForeignKey(t_company, on_delete=models.CASCADE)
 
     def __str__(self):

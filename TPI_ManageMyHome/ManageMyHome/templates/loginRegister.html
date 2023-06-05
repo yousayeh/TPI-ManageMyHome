@@ -7,6 +7,13 @@
     <form method="POST">
         {% csrf_token %}
         <h1>Se connecter</h1>
+        {% if messages  %}
+            <ul class='alert alert-danger'>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
         <div class="mb-3">
             <label for="username" class="form-label">Nom d'utilisateur :</label>
             <input type="text" class="form-control" name="username">
@@ -25,7 +32,7 @@
         {% csrf_token %}
         <h1>S'inscrire</h1>
         {% comment %} {% for field in form %}
-            <label for="test" class="form-label">{{ field.label }}</label>
+            <label for="{{ field.label }}" class="form-label">{{ field.label }}</label>
             {{ field }}
         {% endfor %} {% endcomment %}
         {{ form.as_p }}

@@ -178,7 +178,7 @@ class CompanyForm(forms.ModelForm):
         zip = forms.IntegerField()
         city = forms.CharField(max_length=128)
         domain = forms.CharField(max_length=128)
-        phone = forms.IntegerField()
+        phone = forms.CharField(max_length=16)
         email = forms.EmailField()
         image = forms.ImageField()
 
@@ -216,7 +216,7 @@ class ContactForm(forms.ModelForm):
         lastname = forms.CharField(max_length=128)
         function = forms.CharField(max_length=128)
         email = forms.EmailField()
-        phone = forms.IntegerField()
+        phone = forms.CharField(max_length=16)
         company = forms.MultipleChoiceField()
 
         # Name correctly the label with the wanted text label
