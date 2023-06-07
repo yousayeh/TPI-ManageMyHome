@@ -1,0 +1,153 @@
+/* General */
+
+.navbar-nav .nav-link {
+    color: var(--bs-dark);
+}
+
+.navbar-brand {
+    color: var(--bs-dark);
+}
+
+.navbar-toggler {
+    border: 1px solid var(--bs-dark) !important;
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewbox='0 0 30 30'%3e%3cpath stroke='black' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.baseBackgroung {
+    margin: 20px 0 0 0;
+}
+
+/* Index */
+
+.linkExcept:hover {
+    color: white !important;
+}
+
+/* Detail Work */
+
+.table {
+    margin: 20px 0 0 0;
+}
+
+/* Add house */
+
+.houseForm, .workFormUpdate, .projectFormUpdate {
+    width: 30%;
+}
+
+/* Add work project */
+
+.formsContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+#worContract-clear_id, #worBillUrl-clear_id, .workFormUpdate > p:nth-child(9) > label[for="worContract-clear_id"], .workFormUpdate > p:nth-child(10) > label[for="worBillUrl-clear_id"] {
+    display: none;
+}
+
+/* Companies */
+
+.contactInfo p {
+    margin: 0;
+}
+
+.contactInfo {
+    margin: 0 0 0 20px;
+}
+
+.contactContainer {
+    display: flex;
+    align-items: center;
+    margin: 20px 0 0 0;
+}
+
+.contactIcon svg {
+    width: 64px;
+    height: 64px;
+}
+
+.contactContent {
+    display: flex;
+    flex-direction: column;
+    max-height: 296px;
+    overflow: auto;
+    margin: 0 20px 0 20px;
+    justify-content: center;
+}
+
+.contactIcon {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.actionContact {
+    margin: -10px 0 0 0;
+    display: flex;
+}
+
+.companyInfo {
+    margin: 0 0 0 30px;
+}
+
+/* Statistics */
+
+.statContent {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.statContent > div > div {
+    margin: 75px 0 0 0;
+}
+
+
+
+/* Responsive Design */
+
+@media (max-width: 1200px) { 
+    .statContent > div {
+        width: 100% !important;
+    }
+}
+
+@media (max-width: 991px) { 
+    .addButton {
+        width: 100%;
+    }
+
+    .containerIndex {
+        display: flex;
+        flex-direction: column !important;
+    }
+
+    .colIndex {
+        width: 100% !important;
+    }
+}
+
+@media (max-width: 768px) { 
+    .formsContainer {
+        flex-direction: column;
+    }
+
+    .projectForm, .contactForm {
+        margin: 100px 0 0 0;
+    }
+
+    .houseForm, .workFormUpdate, .projectFormUpdate {
+        width: 100%;
+    }
+
+    .cardContent {
+        flex-direction: column;
+    }
+ }

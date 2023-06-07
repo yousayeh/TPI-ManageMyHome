@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+    <div class="formsContainer">
+        <form class="companyForm" method ="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h1>Ajouter une entreprise</h1>
+            {{ formComany.as_p }}
+            <input type="submit" class="btn btn-primary" name="btnSubmitCompany" value="Ajouter">
+        </form>
+
+        <form class="contactForm" method ="POST">
+            {% csrf_token %}
+            <h1>Ajouter un contact</h1>
+            {{ formContact.as_p }}
+            <input type="submit" class="btn btn-primary" name="btnSubmitConact" value="Ajouter">
+        </form>
+    </div>
+</div>
+
+{% endblock content %}

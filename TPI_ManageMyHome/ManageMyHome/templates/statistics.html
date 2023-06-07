@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+    <h1>Statistiques</h1>
+
+    <div class="statContent">
+        <div class="statContentLeft" style="width: 50%;">
+
+            <div>
+                <h3>Somme dépensée par année :</h3>
+                <table class="table table-bordered w-100">
+                    <thead>
+                        <tr>
+                            <th scope="col">Année</th>
+                            <th scope="col">Coût total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for work in woksCost %}
+                            <tr>
+                                <td>{{ work.year }}</td>
+                                <td>{{ work.totalCost }} CHF</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div>
+                <h3>Somme dépensée par domaine :</h3>
+                <canvas id="myChart"></canvas>
+            </div>
+
+        </div>
+
+        <div>
+
+            <div>
+                <h3>Nombre d'intervention sur l'année :</h3>
+                <table class="table table-bordered w-100">
+                    <thead>
+                        <tr>
+                            <th scope="col">Année</th>
+                            <th scope="col">Nombre d'intervention</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for work in woksIntervention %}
+                            <tr>
+                                <td>{{ work.year }}</td>
+                                <td>{{ work.totalIntervention }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div>
+                <h3>Liste des travaux de l'année avec coût :</h3>
+                <form method ="POST" class="d-flex justify-content-between">
+                    {% csrf_token %}
+                    <select name="worYear" class="form-control w-75">
+                        <option value="{% now "Y" %}">---- Choisissez une année ----</option>
+                        {% for year in allYears %}
+                            <option value="{{ year }}">{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="submit" class="btn btn-primary" name="btnSubmit" value="Afficher">
+                </form>
+                <table class="table table-bordered w-100">
+                    <thead>
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Nom</th>
+                            <th scope="col">Coût</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for work in worksByYear %}
+                            <tr>
+                                <td>{{ work.worStart | date:"d.m.Y" }}</td>
+                                <td>{{ work.worName }}</td>
+                                <td>{{ work.worCost }} CHF</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('myChart');
+  
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: {{ labels | safe }},
+        datasets: [{
+          label: 'Somme dépensée (CHF)',
+          data: {{ data | safe }},
+          borderWidth: 1,
+          backgroundColor: ['#F0F0F8']
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+</script>
+
+{% endblock content %}

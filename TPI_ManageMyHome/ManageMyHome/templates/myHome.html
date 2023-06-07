@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        {% for picture in pictures %}
+            <div class="carousel-item {% if forloop.counter0 == 0 %}active{% endif %}">
+                <img src="{{ picture.picImage.url }}" class="d-block w-100" alt="House Images" style="max-height: 461px;">
+            </div>
+        {% endfor %}
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+<div class="container">
+    <div class="btn-group" style="margin-top: 20px;">
+        <a href="{% url 'updateHouse' house.id %}" class="btn btn-sm btn-outline-secondary">Modifier</a>
+        <a href="{% url 'deleteHouse' house.id %}" class="btn btn-sm btn-outline-secondary" onclick="return confirm('Êtes vous sûr de vouloir supprimer ? Cette action est irréversible')">Supprimer</a>
+    </div>
+    <table class="table">
+        <tbody>
+            <tr>
+                <td>Localité : </td>
+                <td>{{ house.houCity }}</td>
+            </tr>
+            <tr>
+                <td>No de parcelle :</td>
+                <td>{{ house.houPlot }}</td>
+            </tr>
+            <tr>
+                <td>Surface :</td>
+                <td>{{ house.houSurface }} m²</td>
+            </tr>
+            <tr>
+                <td>Année de construction :</td>
+                <td>{{ house.houConstructionYear }}</td>
+            </tr>
+            <tr>
+                <td>Etages :</td>
+                <td>{{ house.houFloor }}</td>
+            </tr>
+            <tr>
+                <td>Nombre de pièces :</td>
+                <td>{{ house.houRoom }}</td>
+            </tr>
+            <tr>
+                <td>Technologie de chauffage :</td>
+                <td>{{ house.idxHeaterTechnologie }}</td>
+            </tr>
+            <tr>
+                <td>Documents annexes :</td>
+                <td>
+                    {% for document in documents %}
+                        {% if document.docFileUrl %}
+                            <a href="{{ document.docFileUrl.url }}">{{ document.docFileUrl.url }}</a><br>
+                        {% else %}
+                            Aucun fichier
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .baseBackgroung {
+        margin: 0;
+    }    
+</style>
+
+{% endblock content %}

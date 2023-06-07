@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+    <div class="formsContainer">
+        <form class="workForm" method ="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h1>Ajouter des travaux</h1>
+            {{ formWork.as_p }}
+            <input type="submit" class="btn btn-primary" name="btnSubmitWork" value="Ajouter">
+        </form>
+
+        <form class="projectForm" method ="POST">
+            {% csrf_token %}
+            <h1>Ajouter un projet</h1>
+            {{ formProject.as_p }}
+            <input type="submit" class="btn btn-primary" name="btnSubmitProject" value="Ajouter">
+        </form>
+    </div>
+</div>
+{% endblock content %}
